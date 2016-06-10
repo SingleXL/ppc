@@ -1,18 +1,3 @@
-/*
- * Copyright 2013-2018 Lilinfeng.
- *  
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *  
- *      http://www.apache.org/licenses/LICENSE-2.0
- *  
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.artJava.protocol.client.handlers;
 
 import org.artJava.protocol.constant.MessageType;
@@ -24,30 +9,13 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 
-/**
- * @author Lilinfeng
- * @date 2014年3月15日
- * @version 1.0
- */
 public class LoginAuthReqHandler extends ChannelHandlerAdapter {
 
-	/**
-	 * Calls {@link ChannelHandlerContext#fireChannelActive()} to forward to the
-	 * next {@link ChannelHandler} in the {@link ChannelPipeline}.
-	 * 
-	 * Sub-classes may override this method to change behavior.
-	 */
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		ctx.writeAndFlush(buildLoginReq());
 	}
 
-	/**
-	 * Calls {@link ChannelHandlerContext#fireChannelRead(Object)} to forward to
-	 * the next {@link ChannelHandler} in the {@link ChannelPipeline}.
-	 * 
-	 * Sub-classes may override this method to change behavior.
-	 */
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		Message message = (Message) msg;

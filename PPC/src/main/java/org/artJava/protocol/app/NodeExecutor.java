@@ -1,9 +1,13 @@
 package org.artJava.protocol.app;
 
 import java.io.IOException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
 
+import org.artJava.protocol.constant.MessageType;
 import org.artJava.protocol.network.Client;
 import org.artJava.protocol.network.nniotcp.NettyClient;
+import org.artJava.protocol.pojo.Header;
 import org.artJava.protocol.pojo.Message;
 import org.artJava.protocol.util.UUIDUtil;
 import org.slf4j.Logger;
@@ -52,7 +56,9 @@ public class NodeExecutor {
 	}
 
 	private void handle(Message msg) {
-
+		if (msg != null) {
+			System.out.println(msg);
+		}
 	}
 
 	public void start() {
@@ -84,15 +90,38 @@ public class NodeExecutor {
 	public void send(Message m) {
 		mainClient.send(m);
 	}
-	
-	
-	public static void main(String[] args) throws Exception{
-		
-		NodeExecutor ne = new NodeExecutor("127.0.0.1", 8888);
-		ne.connect();
-		
+
+	public boolean isChannelOpen() {
+		return mainClient.isConnected();
 	}
-	
-	
-	
+
+	public static void main(String[] args) throws Exception {
+
+		final NodeExecutor ne = new NodeExecutor("127.0.0.1", 8888);
+		ne.start();
+
+		new Thread(new Runnable() {
+			public void run() {
+				while (!Thread.interrupted()) {
+					if (ne.isChannelOpen()) {
+						try {
+							TimeUnit.SECONDS.sleep(1);
+							System.out.println("send...");
+
+							Message message = new Message();
+							Header header = new Header();
+							header.setType(MessageType.MESSAGE.value());
+							message.setHeader(header);
+							message.setBody("aa");
+							ne.send(message);
+						} catch (Exception e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+				}
+			}
+		}).start();
+
+	}
+
 }

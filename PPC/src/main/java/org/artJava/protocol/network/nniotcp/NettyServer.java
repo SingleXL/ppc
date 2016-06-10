@@ -12,7 +12,6 @@ import org.artJava.protocol.network.Server;
 import org.artJava.protocol.pojo.Message;
 import org.artJava.protocol.server.handlers.HeartBeatRespHandler;
 import org.artJava.protocol.server.handlers.LoginAuthRespHandler;
-import org.artJava.protocol.server.singleton.MsgChannels;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -52,7 +51,10 @@ public class NettyServer implements Server {
 		bossGroup = new NioEventLoopGroup();
 		workerGroup = new NioEventLoopGroup();
 		ServerBootstrap b = new ServerBootstrap();
-		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
+		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+		.option(ChannelOption.SO_BACKLOG, 100)
+		.handler(new LoggingHandler(LogLevel.INFO))
+		.childHandler(new ChannelInitializer<SocketChannel>() {
 			@Override
 			public void initChannel(SocketChannel ch) throws IOException {
 				ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
@@ -65,10 +67,8 @@ public class NettyServer implements Server {
 		});
 
 		// 绑定端口，同步等待成功
-		ChannelFuture future = b.bind(host, port).sync();
+		b.bind(host, port).sync();
 		System.out.println("Netty server start ok : " + (NettyConstant.REMOTEIP + " : " + NettyConstant.PORT));
-		future.channel().closeFuture().sync();
-
 	}
 
 	public Message receive() {

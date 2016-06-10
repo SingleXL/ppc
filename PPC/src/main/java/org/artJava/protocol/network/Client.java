@@ -7,6 +7,8 @@ import org.artJava.protocol.pojo.Message;
 public interface Client {
 
 	void connectTo(String ipAddress, int port) throws IOException, InterruptedException;
+	
+	boolean isConnected();
 
 	void send(Message msg);
 

@@ -72,15 +72,15 @@ public class NodeMaster {
 	}
 
 	private void handle(Message msg) {
-		System.out.println(msg);
+		if (msg!=null) {
+			System.out.println(msg);
+		}
 	}
 	
 	public static void main(String[] args) throws Exception{
 		
 		NodeMaster nm = new NodeMaster("127.0.0.1",8888);
 		nm.start();
-		
-		
 	}
 
 }
