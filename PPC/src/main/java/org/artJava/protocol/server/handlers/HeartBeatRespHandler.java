@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.artJava.protocol.server;
+package org.artJava.protocol.server.handlers;
 
 import org.artJava.protocol.constant.MessageType;
 import org.artJava.protocol.pojo.Header;

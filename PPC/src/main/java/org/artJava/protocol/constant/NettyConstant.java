@@ -5,7 +5,7 @@ package org.artJava.protocol.constant;
  * @date 2016年6月6日
  * @version 1.0
  */
-public final class PPCConstant {
+public final class NettyConstant {
 	
     public static final String REMOTEIP = "127.0.0.1";
     public static final int PORT = 8080;
