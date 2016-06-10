@@ -1,6 +1,8 @@
 package org.artJava.protocol.network.nniotcp;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -10,8 +12,10 @@ import org.artJava.protocol.network.Server;
 import org.artJava.protocol.pojo.Message;
 import org.artJava.protocol.server.handlers.HeartBeatRespHandler;
 import org.artJava.protocol.server.handlers.LoginAuthRespHandler;
+import org.artJava.protocol.server.singleton.MsgChannels;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -35,11 +39,13 @@ public class NettyServer implements Server {
 	private EventLoopGroup bossGroup;
 	private EventLoopGroup workerGroup;
 	private BlockingQueue<Message> msgQ;
+	private Map<String, Channel> channelMap;
 
 	public NettyServer() {
 		bossGroup = null;
 		workerGroup = null;
 		msgQ = new LinkedBlockingQueue<Message>();
+		channelMap = new HashMap<String, Channel>();
 	}
 
 	public void bind(String host, int port) throws Exception {
@@ -81,9 +87,17 @@ public class NettyServer implements Server {
 	@SuppressWarnings("rawtypes")
 	private class MsgHandler extends SimpleChannelInboundHandler {
 		@Override
-		protected void messageReceived(ChannelHandlerContext ctx, Object msg) throws Exception {
-			msgQ.put((Message) msg);
+		protected void messageReceived(ChannelHandlerContext ctx, Object _msg) throws Exception {
+			if (_msg!=null) {
+				Message msg = (Message) _msg;
+				msgQ.put(msg);
+				channelMap.put(msg.getHeader().getExecutorUID(), ctx.channel());
+			}
 		}
+	}
+
+	public void send(String executorUID, Message msg) {
+		channelMap.get(executorUID).writeAndFlush(msg);
 	}
 
 }

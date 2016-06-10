@@ -9,4 +9,7 @@ public interface Server {
     Message receive() ;
 
     void close();
+    
+    void send(String executorUID,Message msg);
+    
 }

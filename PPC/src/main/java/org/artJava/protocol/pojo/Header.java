@@ -4,10 +4,19 @@ import java.io.Serializable;
 
 public class Header implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	private int crcCode = 0xabef0101;
-	private int length;
-	private long sessionID;
+	private String executorUID;
 	private byte type;
+
+	public String getExecutorUID() {
+		return executorUID;
+	}
+
+	public void setExecutorUID(String executorUID) {
+		this.executorUID = executorUID;
+	}
 
 	public int getCrcCode() {
 		return crcCode;
@@ -15,22 +24,6 @@ public class Header implements Serializable {
 
 	public void setCrcCode(int crcCode) {
 		this.crcCode = crcCode;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	public long getSessionID() {
-		return sessionID;
-	}
-
-	public void setSessionID(long sessionID) {
-		this.sessionID = sessionID;
 	}
 
 	public byte getType() {
