@@ -1,8 +1,5 @@
 package org.artJava.protocol.app;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -12,15 +9,12 @@ import org.artJava.protocol.pojo.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.netty.channel.Channel;
-
 public class NodeMaster {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeMaster.class);
 
 	private final String bindIP;
 	private final int bindPort;
 	private Server server;
-	private Map<String, Channel> channelMap;
 
 	// threads
 	private Thread msgListener;
@@ -38,7 +32,6 @@ public class NodeMaster {
 
 	public void start() throws Exception {
 		LOGGER.info("Starting node master... ");
-		buildCaches();
 		server.bind(bindIP, bindPort);
 		msgListener.start();
 	}
@@ -56,14 +49,9 @@ public class NodeMaster {
 		LOGGER.info("Node master stopped. ");
 	}
 
-	private void buildCaches() {
-		channelMap = new HashMap<String, Channel>();
-	}
-
 	private void freeCaches() {
 		mainLock.lock();
 		try {
-			channelMap = null;
 		} finally {
 			mainLock.unlock();
 		}
@@ -85,6 +73,14 @@ public class NodeMaster {
 
 	private void handle(Message msg) {
 		System.out.println(msg);
+	}
+	
+	public static void main(String[] args) throws Exception{
+		
+		NodeMaster nm = new NodeMaster("127.0.0.1",8888);
+		nm.start();
+		
+		
 	}
 
 }
