@@ -97,7 +97,7 @@ public class NodeMaster {
 		Header header = new Header();
 		header.setType(MessageType.MESSAGE.value());
 		message.setHeader(header);
-		message.setBody("123");
+		message.setBody(config);
 		server.send(executorUID, message);
 	}
 
