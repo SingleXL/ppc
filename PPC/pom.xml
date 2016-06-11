@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.artJava</groupId>
-	<artifactId>ppc</artifactId>
+	<artifactId>netty-ppc</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>ppc</name>
+	<name>netty-ppc</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
