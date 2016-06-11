@@ -7,7 +7,7 @@
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>test-netty</name>
+	<name>ppc</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -90,19 +90,26 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>org.artJava.protocol.app.Application</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
 				<executions>
 					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
 						<goals>
-							<goal>java</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<mainClass>com.cloud.dc.master.Main</mainClass>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
