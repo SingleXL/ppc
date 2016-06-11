@@ -31,9 +31,9 @@ public class Application {
             options.addOption("m", "master", false, "run as a node master");
             options.addOption("b", "bind-ip", true, "specify an IP to bind");
             options.addOption("p", "bind-port", true, "specify a port to bind");
-            options.addOption("e", "executor", false, "run as a node executor");
             options.addOption(null, "master-ip", true, "specify a master IP to connect");
             options.addOption(null, "master-port", true, "specify a master port to connect");
+            options.addOption("e", "executor", false, "run as a node executor");
             options.addOption("h", "help", false, "get help");
             
             CommandLine commandLine = new GnuParser().parse(options, args);

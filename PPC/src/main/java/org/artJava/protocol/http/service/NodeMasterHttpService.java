@@ -23,7 +23,7 @@ public class NodeMasterHttpService {
 	private static final NodeMasterHttpService INSTANCE = new NodeMasterHttpService();
 
 	public static final String BASE_URI = "https://0.0.0.0/v1/";
-	public static final int PORT = 443;
+	public static final int PORT = 8443;
 	private static final String RESOURCE_PKG = "org.artJava.protocol.http.resource";
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeMasterHttpService.class);
 
@@ -45,28 +45,8 @@ public class NodeMasterHttpService {
 		LOGGER.info("Starting http service... ");
 		master = new NodeMaster(config.getBindIP(), config.getBindPort());
 		master.start();
-		server = GrizzlyHttpServerFactory.createHttpServer(UriBuilder.fromUri(BASE_URI).port(PORT).build(), rc, true, makeSSL());
+		server = GrizzlyHttpServerFactory.createHttpServer(UriBuilder.fromUri(BASE_URI).port(PORT).build(), rc, false, null);
 		LOGGER.info("Http service started. ");
-	}
-
-	private SSLEngineConfigurator makeSSL() throws IOException {
-		SSLContextConfigurator sslConf = new SSLContextConfigurator();
-		sslConf.setKeyStoreBytes(read("ssl/mlpdcs_ks.jks"));
-		sslConf.setKeyStorePass("password");
-		sslConf.setTrustStoreBytes(read("ssl/mlpdcs_ts.jks"));
-		sslConf.setTrustStorePass("password");
-		return new SSLEngineConfigurator(sslConf, false, false, false);
-	}
-
-	private byte[] read(String resource) throws IOException {
-		try (ByteArrayOutputStream out = new ByteArrayOutputStream(); InputStream in = NodeMasterHttpService.class.getClassLoader().getResourceAsStream(resource)) {
-			int ch;
-			while ((ch = in.read()) != -1) {
-				out.write(ch);
-			}
-			out.flush();
-			return out.toByteArray();
-		}
 	}
 
 	public NodeMaster getMaster() {

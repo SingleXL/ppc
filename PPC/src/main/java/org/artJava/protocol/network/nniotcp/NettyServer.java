@@ -71,7 +71,7 @@ public class NettyServer implements Server {
 
 		// 绑定端口，同步等待成功
 		b.bind(host, port).sync();
-		System.out.println("Netty server start ok : " + (NettyConstant.REMOTEIP + " : " + NettyConstant.PORT));
+		System.out.println("Netty server start ok : " + (host + " : " + port));
 	}
 
 	public Message receive() {
