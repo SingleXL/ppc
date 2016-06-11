@@ -1,6 +1,10 @@
 package org.artJava.protocol.network;
 
+import java.util.Map;
+
 import org.artJava.protocol.pojo.Message;
+
+import io.netty.channel.Channel;
 
 public interface Server {
 

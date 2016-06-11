@@ -1,16 +1,10 @@
 package org.artJava.protocol.http.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.ws.rs.core.UriBuilder;
 
 import org.artJava.protocol.app.NodeMaster;
 import org.artJava.protocol.config.SimpleConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.ssl.SSLContextConfigurator;
-import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
@@ -22,8 +16,8 @@ import org.slf4j.LoggerFactory;
 public class NodeMasterHttpService {
 	private static final NodeMasterHttpService INSTANCE = new NodeMasterHttpService();
 
-	public static final String BASE_URI = "https://0.0.0.0/v1/";
-	public static final int PORT = 8443;
+	public static final String BASE_URI = "http://0.0.0.0/v1/";
+	public static final int PORT = 8888;
 	private static final String RESOURCE_PKG = "org.artJava.protocol.http.resource";
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeMasterHttpService.class);
 

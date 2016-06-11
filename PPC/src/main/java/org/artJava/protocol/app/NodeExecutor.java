@@ -38,7 +38,7 @@ public class NodeExecutor {
 
 	private void initExecutorUID() {
 		if (executorUID == null) {
-			executorUID = UUIDUtil.randomID();
+			executorUID = UUIDUtil.getExecutorUID();
 		}
 	}
 

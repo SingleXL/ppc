@@ -65,7 +65,7 @@ public class NettyClient implements Client {
 				public void initChannel(SocketChannel ch) throws Exception {
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 					ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-					ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(50));
+					ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(60));
 					ch.pipeline().addLast("LoginAuthHandler", new LoginAuthReqHandler());
 					ch.pipeline().addLast("HeartBeatHandler", new HeartBeatReqHandler());
 					ch.pipeline().addLast("msgHandler", new msgHandler());

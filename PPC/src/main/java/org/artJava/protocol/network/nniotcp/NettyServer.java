@@ -2,7 +2,9 @@ package org.artJava.protocol.network.nniotcp;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -54,15 +56,12 @@ public class NettyServer implements Server {
 		bossGroup = new NioEventLoopGroup();
 		workerGroup = new NioEventLoopGroup();
 		ServerBootstrap b = new ServerBootstrap();
-		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-		.option(ChannelOption.SO_BACKLOG, 100)
-		.handler(new LoggingHandler(LogLevel.INFO))
-		.childHandler(new ChannelInitializer<SocketChannel>() {
+		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 100).handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
 			@Override
 			public void initChannel(SocketChannel ch) throws IOException {
 				ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 				ch.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-				ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(50));
+				ch.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(60));
 				ch.pipeline().addLast(new LoginAuthRespHandler());
 				ch.pipeline().addLast("HeartBeatHandler", new HeartBeatRespHandler());
 				ch.pipeline().addLast("msgHandler", new MsgHandler());
@@ -80,46 +79,37 @@ public class NettyServer implements Server {
 
 	public void close() {
 		if (workerGroup != null) {
-            workerGroup.shutdownGracefully();
-        }
-        if (bossGroup != null) {
-            bossGroup.shutdownGracefully();
-        }
+			workerGroup.shutdownGracefully();
+		}
+		if (bossGroup != null) {
+			bossGroup.shutdownGracefully();
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
 	private class MsgHandler extends SimpleChannelInboundHandler {
+		
 		@Override
 		protected void messageReceived(ChannelHandlerContext ctx, Object _msg) throws Exception {
-			if (_msg!=null) {
+			if (_msg != null) {
 				Message msg = (Message) _msg;
 				msgQ.put(msg);
 				channelMap.put(msg.getHeader().getExecutorUID(), ctx.channel());
-				System.out.println(channelMap);
 				MsgChannels.channelGroup.add(ctx.channel());
-				MsgChannels.channelGroup.writeAndFlush(buildHeatBeat());
 			}
 		}
-		
+
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 			super.exceptionCaught(ctx, cause);
 			System.out.println("error....");
 		}
-		
+
 	}
 
 	public void send(String executorUID, Message msg) {
 		channelMap.get(executorUID).writeAndFlush(msg);
 	}
 
-	
-	private Message buildHeatBeat() {
-		Message message = new Message();
-		Header header = new Header();
-		header.setType(MessageType.MESSAGE.value());
-		message.setHeader(header);
-		message.setBody("bb");
-		return message;
-	}
+
 }

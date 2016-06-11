@@ -1,13 +1,20 @@
 package org.artJava.protocol.app;
 
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.artJava.protocol.constant.MessageType;
 import org.artJava.protocol.network.Server;
 import org.artJava.protocol.network.nniotcp.NettyServer;
+import org.artJava.protocol.pojo.Header;
 import org.artJava.protocol.pojo.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.netty.channel.Channel;
 
 public class NodeMaster {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NodeMaster.class);
@@ -15,6 +22,7 @@ public class NodeMaster {
 	private final String bindIP;
 	private final int bindPort;
 	private Server server;
+	private Set<String> eids;
 
 	// threads
 	private Thread msgListener;
@@ -27,6 +35,7 @@ public class NodeMaster {
 		bindPort = port;
 		server = new NettyServer();
 		mainLock = new ReentrantLock();
+		eids = new LinkedHashSet<String>();
 		initMsgListener();
 	}
 
@@ -73,14 +82,23 @@ public class NodeMaster {
 
 	private void handle(Message msg) {
 		if (msg != null) {
+			eids.add(msg.getHeader().getExecutorUID());
 			System.out.println(msg);
+			
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+	public Set<String> getExecutors() {
+		return eids;
+	}
 
-		NodeMaster nm = new NodeMaster("127.0.0.1", 8888);
-		nm.start();
+	public void updateExecutor(String executorUID, String config) {
+		Message message = new Message();
+		Header header = new Header();
+		header.setType(MessageType.MESSAGE.value());
+		message.setHeader(header);
+		message.setBody("123");
+		server.send(executorUID, message);
 	}
 
 }

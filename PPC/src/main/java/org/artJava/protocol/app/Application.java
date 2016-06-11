@@ -1,6 +1,7 @@
 package org.artJava.protocol.app;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -8,7 +9,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.artJava.protocol.config.SimpleConfig;
 import org.artJava.protocol.config.SimpleConfigBuilder;
+import org.artJava.protocol.constant.MessageType;
 import org.artJava.protocol.http.service.NodeMasterHttpService;
+import org.artJava.protocol.pojo.Header;
+import org.artJava.protocol.pojo.Message;
+import org.artJava.protocol.util.UUIDUtil;
 
 public class Application {
 
@@ -58,6 +63,32 @@ public class Application {
                     } else {
                         final NodeExecutor executor = new NodeExecutor(config);
                         executor.start();
+                        
+                        new Thread(new Runnable() {
+							public void run() {
+								
+								String uid = "eid_"+System.currentTimeMillis();
+								
+								while(!Thread.interrupted()){
+									try {
+										TimeUnit.SECONDS.sleep(2);
+										Message message = new Message();
+										Header header = new Header();
+										header.setExecutorUID(uid);
+										header.setType(MessageType.MESSAGE.value());
+										message.setHeader(header);
+										message.setBody("client msg " + System.currentTimeMillis());
+										executor.send(message);
+									} catch (Exception e) {
+										Thread.currentThread().interrupt();
+									}
+									
+								}							
+								
+								
+							}
+						}).start();
+                        
                         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                             @Override
                             public void run() {
