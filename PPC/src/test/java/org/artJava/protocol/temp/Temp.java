@@ -1,28 +1,65 @@
 package org.artJava.protocol.temp;
 
-import java.util.concurrent.SynchronousQueue;
+class a {
 
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.util.concurrent.GlobalEventExecutor;
+	private int a = 10;
 
-public class Temp {
+	public int getA() {
+		return a;
+	}
 
-	public static void main(String[] args) {
-
-		try {
-
-			System.out.println(123);
-			throw new IllegalStateException();
-		}
-
-		catch (Exception e) {
-			System.out.println(1234);
-			
-		} finally {
-			System.out.println(129);
-		}
-
+	public void setA(int a) {
+		this.a = a;
 	}
 
 }
+
+class b extends a {
+
+	private int b = 3;
+
+	public int getB() {
+		return b;
+	}
+
+	public void setB(int b) {
+		this.b = b;
+	}
+
+}
+
+public class Temp {
+	
+	public static void main(String[] args) {
+		
+		
+		b bb = new b();
+		bb.setA(123);
+		a aa = (a)bb;
+		
+		System.out.println(aa.getA());
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
