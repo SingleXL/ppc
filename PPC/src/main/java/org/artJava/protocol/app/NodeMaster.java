@@ -65,21 +65,21 @@ public class NodeMaster {
 						handle(server.receive());
 					} catch (Exception e) {
 						Thread.currentThread().interrupt();
-					} 
+					}
 				}
 			}
 		}, "NodeMaster - msg listener");
 	}
 
 	private void handle(Message msg) {
-		if (msg!=null) {
+		if (msg != null) {
 			System.out.println(msg);
 		}
 	}
-	
-	public static void main(String[] args) throws Exception{
-		
-		NodeMaster nm = new NodeMaster("127.0.0.1",8888);
+
+	public static void main(String[] args) throws Exception {
+
+		NodeMaster nm = new NodeMaster("127.0.0.1", 8888);
 		nm.start();
 	}
 

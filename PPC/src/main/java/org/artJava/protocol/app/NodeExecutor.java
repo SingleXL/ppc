@@ -1,7 +1,6 @@
 package org.artJava.protocol.app;
 
 import java.io.IOException;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.artJava.protocol.constant.MessageType;

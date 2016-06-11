@@ -7,11 +7,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.artJava.protocol.codec.MarshallingCodeCFactory;
+import org.artJava.protocol.constant.MessageType;
 import org.artJava.protocol.constant.NettyConstant;
 import org.artJava.protocol.network.Server;
+import org.artJava.protocol.pojo.Header;
 import org.artJava.protocol.pojo.Message;
 import org.artJava.protocol.server.handlers.HeartBeatRespHandler;
 import org.artJava.protocol.server.handlers.LoginAuthRespHandler;
+import org.artJava.protocol.server.singleton.MsgChannels;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -92,12 +95,31 @@ public class NettyServer implements Server {
 				Message msg = (Message) _msg;
 				msgQ.put(msg);
 				channelMap.put(msg.getHeader().getExecutorUID(), ctx.channel());
+				System.out.println(channelMap);
+				MsgChannels.channelGroup.add(ctx.channel());
+				MsgChannels.channelGroup.writeAndFlush(buildHeatBeat());
 			}
 		}
+		
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+			super.exceptionCaught(ctx, cause);
+			System.out.println("error....");
+		}
+		
 	}
 
 	public void send(String executorUID, Message msg) {
 		channelMap.get(executorUID).writeAndFlush(msg);
 	}
 
+	
+	private Message buildHeatBeat() {
+		Message message = new Message();
+		Header header = new Header();
+		header.setType(MessageType.MESSAGE.value());
+		message.setHeader(header);
+		message.setBody("bb");
+		return message;
+	}
 }
