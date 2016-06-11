@@ -93,6 +93,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<finalName>ppc-0.0.1</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
