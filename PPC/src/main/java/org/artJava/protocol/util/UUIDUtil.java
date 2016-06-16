@@ -17,7 +17,7 @@ public class UUIDUtil {
 	}
 	
 	public static String getExecutorUID() {
-		if (executorUID!=null) {
+		if (executorUID==null) {
 			executorUID = randomID();
 			return executorUID;
 		}else {

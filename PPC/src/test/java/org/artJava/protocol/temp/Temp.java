@@ -1,5 +1,8 @@
 package org.artJava.protocol.temp;
 
+import org.artJava.protocol.util.UUIDUtil;
+import org.glassfish.jersey.server.model.Suspendable;
+
 class a {
 
 	private int a = 10;
@@ -32,12 +35,8 @@ public class Temp {
 	
 	public static void main(String[] args) {
 		
-		
-		b bb = new b();
-		bb.setA(123);
-		a aa = (a)bb;
-		
-		System.out.println(aa.getA());
+		System.out.println(UUIDUtil.getExecutorUID());
+	
 	}
 
 }
